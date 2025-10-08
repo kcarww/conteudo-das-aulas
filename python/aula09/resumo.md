@@ -218,7 +218,7 @@ ft.app(target=main)
 
 ## Como fazer uma calculadora básica (Extra)
 
-```
+```python
 import flet as ft
 
 
