@@ -214,7 +214,99 @@ def main(page: ft.Page):
 
 ft.app(target=main)
 ```
+---
 
+## Como fazer uma calculadora básica (Extra)
+
+```
+import flet as ft
+
+
+def main(page: ft.Page):
+    page.title = "Calculadora"
+    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+    page.horizontal_alignment = ft.CrossAxisAlignment.CENTER
+
+    # Campos de texto para os valores
+    valor1 = ft.TextField(label="Valor 1", width=300,
+                          keyboard_type=ft.KeyboardType.NUMBER)
+    valor2 = ft.TextField(label="Valor 2", width=300,
+                          keyboard_type=ft.KeyboardType.NUMBER)
+
+    # Dropdown para operação
+    operacao = ft.Dropdown(
+        label="Operação",
+        width=300,
+        options=[
+            ft.dropdown.Option("soma", "Soma (+)"),
+            ft.dropdown.Option("subtracao", "Subtração (-)"),
+            ft.dropdown.Option("multiplicacao", "Multiplicação (×)"),
+            ft.dropdown.Option("divisao", "Divisão (÷)"),
+        ],
+        value="soma",
+    )
+
+    resultado_txt = ft.Text("", size=20, visible=False)
+
+    # Função para calcular
+    def calcular(e):
+        try:
+            v1 = float(valor1.value)
+            v2 = float(valor2.value)
+
+            if operacao.value == "soma":
+                resultado = v1 + v2
+                op_simbolo = "+"
+            elif operacao.value == "subtracao":
+                resultado = v1 - v2
+                op_simbolo = "-"
+            elif operacao.value == "multiplicacao":
+                resultado = v1 * v2
+                op_simbolo = "×"
+            elif operacao.value == "divisao":
+                if v2 == 0:
+                    mostrar_msg("Não é possível dividir por zero!", erro=True)
+                    return
+                resultado = v1 / v2
+                op_simbolo = "÷"
+            else:
+                mostrar_msg("Selecione uma operação válida.", erro=True)
+                return
+
+            mostrar_msg(f"{v1} {op_simbolo} {v2} = {resultado}")
+        except ValueError:
+            mostrar_msg(
+                "Por favor, insira valores numéricos válidos!", erro=True)
+
+    def mostrar_msg(texto, erro=False):
+        resultado_txt.value = texto
+        resultado_txt.color = ft.Colors.RED if erro else ft.Colors.GREEN
+        resultado_txt.visible = True
+        page.update()
+
+    btn_calcular = ft.ElevatedButton(
+        text="Calcular", width=300, on_click=calcular)
+
+    page.add(
+        ft.Column(
+            [
+                ft.Text("Calculadora", size=30, weight=ft.FontWeight.BOLD),
+                valor1,
+                valor2,
+                operacao,
+                btn_calcular,
+                resultado_txt,  # fica abaixo do botão
+            ],
+            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            spacing=20,
+        )
+    )
+
+
+ft.app(target=main)
+
+
+```
 ---
 
 ## Dicas finais
